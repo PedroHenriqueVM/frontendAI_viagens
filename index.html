@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViageAI</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0f1117;
+            color: white;
+        }
+
+        .container-custom {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: #181c25;
+            border: 1px solid #262b36;
+        }
+
+        input,
+        select {
+            background: #11151d;
+            color: white;
+        }
+
+        input::placeholder {
+            color: #6b7280;
+        }
+
+        .fade {
+            animation: fade .4s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="border-b border-[#262b36] bg-[#131720]">
+
+        <div class="container-custom px-5 py-5 flex justify-between items-center">
+
+            <div>
+
+                <h1 class="text-2xl font-extrabold">
+                    ✈️ Viaja<span class="text-blue-400">AI</span>
+                </h1>
+
+                <p class="text-sm text-gray-400 mt-1">
+                    Planeje suas viagens com inteligência artificial
+                </p>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- HERO -->
+    <section class="container-custom px-5 py-14">
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+            <!-- TEXTO -->
+            <div>
+
+                <span
+                    class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-2 rounded-full text-sm font-medium">
+                    IA para roteiros de viagem
+                </span>
+
+                <h2 class="text-5xl font-extrabold leading-tight mt-6">
+                    Descubra passeios incríveis sem perder horas planejando.
+                </h2>
+
+                <p class="text-gray-400 text-lg mt-6 leading-relaxed">
+                    Gere roteiros completos com atrações, restaurantes,
+                    estimativa de custos e dicas locais para qualquer cidade.
+                </p>
+
+                <div class="flex gap-4 mt-8 flex-wrap">
+
+                    <div class="card rounded-xl px-5 py-4">
+
+                        <p class="font-bold text-2xl">
+                            +150
+                        </p>
+
+                        <p class="text-gray-400 text-sm mt-1">
+                            destinos populares
+                        </p>
+
+                    </div>
+
+                    <div class="card rounded-xl px-5 py-4">
+
+                        <p class="font-bold text-2xl">
+                            100%
+                        </p>
+
+                        <p class="text-gray-400 text-sm mt-1">
+                            personalizado
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+            <div class="card rounded-2xl p-8">
+
+                <h3 class="text-2xl font-bold">
+                    Criar roteiro
+                </h3>
+
+                <p class="text-gray-400 mt-1 mb-8">
+                    preencha os dados da viagem
+                </p>
+
+                <form id="travel-form" onsubmit="gerarRoteiro(event)">
+
+                    <div class="space-y-5">
+
+                        <!-- DESTINO -->
+                        <div>
+
+                            <label class="block text-sm font-medium mb-2">
+                                Destino
+                            </label>
+
+                            <input type="text" id="input-destino" placeholder="Ex: Tóquio, Japão" required autocomplete="off"
+                                class="w-full border border-[#2b3240] rounded-xl p-4 outline-none focus:border-blue-400">
+
+                        </div>
+
+                        <!-- GRID -->
+                        <div class="grid grid-cols-2 gap-4">
+
+                            <!-- DIAS -->
+                            <div>
+
+                                <label class="block text-sm font-medium mb-2">
+                                    Dias
+                                </label>
+
+                                <input type="number" id="input-dias" placeholder="5" required min="1" max="30" autocomplete="off"
+                                    class="w-full border border-[#2b3240] rounded-xl p-4 outline-none focus:border-blue-400">
+
+                            </div>
+
+                            <!-- ORÇAMENTO -->
+                            <div>
+
+                                <label class="block text-sm font-medium mb-2">
+                                    Orçamento
+                                </label>
+
+                                <select id="select-orcamento"
+                                    class="w-full border border-[#2b3240] rounded-xl p-4 outline-none focus:border-blue-400">
+                                    <option value="Baixo">Baixo</option>
+                                    <option value="Médio" selected>Médio</option>
+                                    <option value="Alto">Alto</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BOTÃO -->
+                    <button id="btn-enviar" type="submit"
+                        class="w-full bg-blue-500 hover:bg-blue-400 transition text-white font-semibold py-4 rounded-xl mt-8 flex justify-center items-center gap-3">
+
+                        <span>
+                            Gerar roteiro
+                        </span>
+
+                        <div id="loading-spinner"
+                            class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
+                        </div>
+
+                    </button>
+
+                </form>
+
+                <!-- ERRO -->
+                <div id="error-message"
+                    class="hidden mt-5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-4 text-sm">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RESULTADO -->
+    <section id="resultado-container" class="hidden container-custom px-5 pb-20 fade">
+
+        <!-- TOPO -->
+        <div class="card rounded-2xl p-8">
+
+            <div class="flex flex-col lg:flex-row justify-between gap-8">
+
+                <div>
+
+                    <p class="text-blue-400 font-medium mb-2">
+                        roteiro criado
+                    </p>
+
+                    <h2 id="rot-titulo" class="text-4xl font-extrabold"></h2>
+
+                    <p id="rot-destino" class="text-gray-400 text-lg mt-3"></p>
+
+                </div>
+
+                <div class="flex gap-4 flex-wrap h-fit">
+
+                    <div class="bg-[#11151d] rounded-xl px-5 py-4">
+
+                        <p class="text-sm text-gray-400">
+                            duração
+                        </p>
+
+                        <p id="rot-duracao" class="font-bold mt-1"></p>
+
+                    </div>
+
+                    <div class="bg-[#11151d] rounded-xl px-5 py-4">
+
+                        <p class="text-sm text-gray-400">
+                            orçamento
+                        </p>
+
+                        <p id="rot-orcamento" class="font-bold mt-1"></p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CUSTO -->
+            <div class="bg-[#11151d] rounded-xl p-5 mt-8">
+
+                <p class="text-sm text-gray-400">
+                    estimativa de custo total
+                </p>
+
+                <h3 id="rot-custo-total" class="text-2xl font-extrabold mt-2"></h3>
+
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="flex flex-wrap gap-3 mt-8">
+
+                <button onclick="salvarFavorito()"
+                    class="border border-[#2b3240] hover:bg-[#202634] transition px-4 py-3 rounded-xl">
+                    ❤️ Favoritar
+                </button>
+
+                <button onclick="compartilharRoteiro()"
+                    class="border border-[#2b3240] hover:bg-[#202634] transition px-4 py-3 rounded-xl">
+                    📤 Compartilhar
+                </button>
+
+                <button onclick="baixarPDF()"
+                    class="border border-[#2b3240] hover:bg-[#202634] transition px-4 py-3 rounded-xl">
+                    📄 PDF
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- ROTEIRO -->
+        <div id="rot-linha-tempo" class="space-y-6 mt-8"></div>
+
+        <!-- DICAS -->
+        <div class="card rounded-2xl p-8 mt-8">
+
+            <h3 class="text-2xl font-bold mb-5">
+                💡 Dicas úteis
+            </h3>
+
+            <ul id="rot-dicas" class="space-y-3 text-gray-400"></ul>
+
+        </div>
+
+    </section>
+
+    <script>
+
+        const API_URL = "https://backend-ai-viagens.vercel.app/generate";
+
+        const spinner = document.getElementById('loading-spinner');
+        const btnEnviar = document.getElementById('btn-enviar');
+        const resultadoContainer = document.getElementById('resultado-container');
+        const errorContainer = document.getElementById('error-message');
+        const linhaTempo = document.getElementById('rot-linha-tempo');
+        const dicasLista = document.getElementById('rot-dicas');
+
+        let roteiroAtual = null;
+
+        async function gerarRoteiro(event) {
+
+            event.preventDefault();
+
+            const destinoVal = document.getElementById('input-destino').value.trim();
+
+            const diasVal = parseInt(document.getElementById('input-dias').value);
+
+            const orcamentoVal = document.getElementById('select-orcamento').value;
+
+            spinner.classList.remove('hidden');
+
+            btnEnviar.disabled = true;
+
+            errorContainer.classList.add('hidden');
+
+            resultadoContainer.classList.add('hidden');
+
+            try {
+
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        destino: destinoVal,
+                        dias: diasVal,
+                        orcamento: orcamentoVal
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+
+                    roteiroAtual = data.dados_roteiro;
+
+                    exibirRoteiro(roteiroAtual);
+
+                } else {
+
+                    mostrarErro(data.message);
+
+                }
+
+            } catch (error) {
+
+                mostrarErro("Erro ao conectar com a API.");
+
+            } finally {
+
+                spinner.classList.add('hidden');
+
+                btnEnviar.disabled = false;
+
+            }
+
+        }
+
+        function exibirRoteiro(roteiro) {
+
+            document.getElementById('rot-titulo').innerText = roteiro.nome_do_roteiro;
+
+            document.getElementById('rot-destino').innerText = `📍 ${roteiro.destino}`;
+
+            document.getElementById('rot-duracao').innerText = roteiro.duracao;
+
+            document.getElementById('rot-orcamento').innerText = roteiro.perfil_orcamento;
+
+            document.getElementById('rot-custo-total').innerText = roteiro.estimativa_custo_total;
+
+            linhaTempo.innerHTML = "";
+
+            roteiro.roteiro_diario.forEach(diaData => {
+
+                const div = document.createElement('div');
+
+                div.className = "card rounded-2xl p-8";
+
+                let atividades = "";
+
+                diaData.atividades.forEach(act => {
+
+                    atividades += `
+                    
+                    <div class="bg-[#11151d] border border-[#2b3240] rounded-xl p-5 mb-4">
+
+                        <div class="flex justify-between items-start flex-wrap gap-4">
+
+                            <span class="bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full">
+                                ${act.periodo}
+                            </span>
+
+                            <span class="text-green-400 text-sm font-medium">
+                                💰 ${act.valor}
+                            </span>
+
+                        </div>
+
+                        <h4 class="text-xl font-bold mt-4">
+                            ${act.nome_do_lugar}
+                        </h4>
+
+                        <p class="text-gray-500 text-sm mt-2">
+                            📍 ${act.endereco}
+                        </p>
+
+                        <p class="text-gray-300 mt-4 leading-relaxed">
+                            ${act.descricao}
+                        </p>
+
+                    </div>
+                    
+                    `;
+
+                });
+
+                div.innerHTML = `
+                
+                <h3 class="text-3xl font-extrabold mb-6">
+                    ${diaData.dia}
+                </h3>
+
+                ${atividades}
+                
+                `;
+
+                linhaTempo.appendChild(div);
+
+            });
+
+            dicasLista.innerHTML = "";
+
+            roteiro.dicas_uteis.forEach(dica => {
+
+                const li = document.createElement('li');
+
+                li.className = "bg-[#11151d] border border-[#2b3240] rounded-xl p-4";
+
+                li.innerText = dica;
+
+                dicasLista.appendChild(li);
+
+            });
+
+            resultadoContainer.classList.remove('hidden');
+
+            resultadoContainer.scrollIntoView({
+                behavior: 'smooth'
+            });
+
+        }
+
+        function mostrarErro(msg) {
+
+            errorContainer.innerText = msg;
+
+            errorContainer.classList.remove('hidden');
+
+        }
+
+        function salvarFavorito() {
+
+            if (!roteiroAtual) return;
+
+            let favoritos = JSON.parse(localStorage.getItem('roteiros_favoritos')) || [];
+
+            favoritos.push(roteiroAtual);
+
+            localStorage.setItem('roteiros_favoritos', JSON.stringify(favoritos));
+
+            alert("Roteiro salvo ❤️");
+
+        }
+
+        async function compartilharRoteiro() {
+
+            if (!roteiroAtual) return;
+
+            const texto = `✈️ Veja esse roteiro para ${roteiroAtual.destino}`;
+
+            if (navigator.share) {
+
+                navigator.share({
+                    title: roteiroAtual.nome_do_roteiro,
+                    text: texto
+                });
+
+            } else {
+
+                navigator.clipboard.writeText(texto);
+
+                alert("Texto copiado!");
+
+            }
+
+        }
+
+        function baixarPDF() {
+
+            if (!roteiroAtual) return;
+
+            const { jsPDF } = window.jspdf;
+
+            const doc = new jsPDF();
+
+            doc.text(roteiroAtual.nome_do_roteiro, 20, 20);
+
+            doc.save(`roteiro-${roteiroAtual.destino}.pdf`);
+
+        }
+
+    </script>
+
+</body>
+
+</html>
