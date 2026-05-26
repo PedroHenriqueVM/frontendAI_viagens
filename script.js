@@ -75,9 +75,29 @@ function exibirRoteiro(roteiro) {
     <h4 class="text-xl font-bold mt-4">
         ${act.nome_do_lugar}
     </h4>
-    <p class="text-gray-500 text-sm mt-2">
+    <div class="flex flex-wrap items-center gap-3 mt-3">
+
+    <p class="text-gray-400 text-sm">
         📍 ${act.endereco}
     </p>
+
+    <a 
+        href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.endereco)}"
+        target="_blank"
+        class="bg-blue-500 hover:bg-blue-400 transition text-white text-xs px-3 py-2 rounded-lg"
+    >
+        Google Maps
+    </a>
+
+    <a 
+        href="https://waze.com/ul?q=${encodeURIComponent(act.endereco)}"
+        target="_blank"
+        class="bg-[#202634] hover:bg-[#2b3240] transition text-white text-xs px-3 py-2 rounded-lg"
+    >
+        Waze
+    </a>
+
+</div>
     <p class="text-gray-300 mt-4 leading-relaxed">
         ${act.descricao}
     </p>
