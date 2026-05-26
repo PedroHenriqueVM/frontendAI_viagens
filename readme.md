@@ -1,4 +1,5 @@
 
+
 # ✈️ ViajaAI - Roteiros Inteligentes
 
 ![HTML5](https://img.shields.io/badge/HTML5-frontend-orange)
@@ -8,6 +9,15 @@
 ![Status](https://img.shields.io/badge/status-online-brightgreen)
 
 Aplicação web que gera roteiros de viagem personalizados usando inteligência artificial. Informe o destino, dias (até 15) e orçamento, e receba um roteiro completo com atrações, restaurantes, custos e dicas locais.
+
+---
+
+
+# 🔗 Links úteis
+
+- [Deploy do frontend na Vercel](https://frontend-ai-viagens.vercel.app/)
+- [API/backend (URL)](https://backend-ai-viagens.vercel.app/)
+- [Repositório da API/backend](https://github.com/PedroHenriqueVM/backendAI_viagens.git)
 
 ---
 
